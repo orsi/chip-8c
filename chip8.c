@@ -118,13 +118,141 @@ void reset(Chip8 *chip8) {
     chip8->delay_timer = 0;
     chip8->sound_timer = 0;
 }
-uint16_t get_opcode(Chip8 *chip8) {
+uint16_t next_opcode(Chip8 *chip8) {
     uint16_t opcode;
     uint8_t most_significant_bit = chip8->RAM[chip8->program_counter];
     uint8_t least_significant_bit = chip8->RAM[chip8->program_counter + 1];
     opcode = most_significant_bit << 8 | least_significant_bit;
+    chip8->current_opcode = opcode;
     return opcode;
 }
-void execute_opcode(Chip8 *chip8);
+// executes the current opcode
+void execute_opcode(Chip8 *chip8) {
+    uint16_t opcode = next_opcode(chip8);
+
+    switch(opcode & 0xF000) {
+        case 0x0000:
+            switch(opcode & 0x00FF) {
+                case 0x00E0:
+                    display_clear(chip8);
+                    break;
+                case 0x00EE:
+                    return_from_subroutine(chip8);
+                    break;
+                default:
+                    // call machine code?
+                    break;
+            }
+            break;
+        case 0x1000:
+            jump_to(chip8);
+            break;
+        case 0x2000:
+            call_to(chip8);
+            break;
+        case 0x3000:
+            skip_if_vx_nn(chip8);                 
+            break;
+        case 0x4000:
+            skip_if_vx_not_nn(chip8);             
+            break;
+        case 0x5000:
+            skip_if_vx_vy(chip8);                 
+            break;
+        case 0x6000:
+            set_vx_to_nn(chip8);                  
+            break;
+        case 0x7000:
+            add_nn_to_vx(chip8);                  
+            break;
+        case 0x8000:
+            switch(opcode & 0x000F) {
+                case 0x0000:
+                    set_vx_to_vy(chip8);                  
+                    break;
+                case 0x0001:
+                    set_vx_to_vx_or_vy(chip8);            
+                    break;
+                case 0x0002:
+                    set_vx_to_vx_and_vy(chip8);           
+                    break;
+                case 0x0003:
+                    set_vx_to_vx_xor_vy(chip8);           
+                    break;
+                case 0x0004:
+                    add_vy_to_vx(chip8);                  
+                    break;
+                case 0x0005:
+                    subtract_vy_from_vx(chip8);           
+                    break;
+                case 0x0006:
+                    store_lobit_vf_shift_vx_right(chip8); 
+                    break;
+                case 0x0007:
+                    set_vx_to_vy_minus_vx(chip8);         
+                    break;
+                case 0x000E:
+                    store_hibit_vf_shift_vx_left(chip8);  
+                    break;
+            }
+            break;
+        case 0x9000:
+            skip_vx_not_equal_vy(chip8);          
+            break;
+        case 0xA000:
+            set_index_to(chip8);                  
+            break;
+        case 0xB000:
+            jump_to_plus_v0(chip8);               
+            break;
+        case 0xC000:
+            set_vx_to_rand(chip8);                
+            break;
+        case 0xD000:
+            draw_at_vx_vy(chip8);                 
+            break;
+        case 0xE000:
+            switch(opcode & 0x00FF) {
+                case 0x009E:
+                    skip_vx_pressed(chip8);               
+                    break;
+                case 0x00A1:
+                    skip_vx_not_pressed(chip8);           
+                    break;
+            }
+            break;
+        case 0xF000:
+            switch(opcode & 0x00FF) {
+                case 0x0007:
+                    set_vx_to_delay_timer(chip8);         
+                    break;
+                case 0x000A:
+                    await_and_store_vx(chip8);            
+                    break;
+                case 0x0015:
+                    set_delay_timer_to_vx(chip8);         
+                    break;
+                case 0x0018:
+                    set_sound_timer_to_vx(chip8);         
+                    break;
+                case 0x001E:
+                    add_vx_to_index(chip8);               
+                    break;
+                case 0x0029:
+                    set_index_to_sprite_at_vx(chip8);     
+                    break;
+                case 0x0033:
+                    store_binary_dec_vx(chip8);           
+                    break;
+                case 0x0055:
+                    store_v0_vx_memory(chip8);            
+                    break;
+                case 0x0065:
+                    fill_v0_vx_memory(chip8);             
+                    break;
+            }
+            break;
+    }
+}
 void process_user_input(Chip8 *chip8);
 void update_timers(Chip8 *chip8);
