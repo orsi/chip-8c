@@ -1,6 +1,15 @@
 #ifndef OPCODES
 #define OPCODES
 
+// source: https://en.wikipedia.org/wiki/CHIP-8
+// NNN: address
+// NN: 8-bit constant
+// N: 4-bit constant
+// X and Y: 4-bit register identifier
+// PC : Program Counter
+// I : 16bit register (For memory address) (Similar to void pointer)
+// VN: One of the 16 available variables. N may be 0 to F (hexadecimal)
+
 void call();                            // 0NNN
 void display_clear();                   // 00E0
 void return_from_subroutine();          // 00EE
