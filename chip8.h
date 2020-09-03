@@ -23,4 +23,6 @@ typedef struct {
 
     unsigned short current_opcode;
 } Chip8;
+
+void load_rom(Chip8 *chip8, const char* file);
 #endif
