@@ -1,12 +1,26 @@
-// Chip-8 data structures and core runtime
-unsigned char registers[16];
-unsigned char memory[4096];
-unsigned short opcode;
-unsigned short index;
-unsigned short program_counter;
-unsigned char delay_timer;
-unsigned char sound_timer;
-unsigned char graphics[64 * 32];
-unsigned char keyboard[16];
-unsigned short stack[16];
-unsigned short stack_pointer;
+#ifndef CHIP8
+#define CHIP8
+
+typedef struct {
+    unsigned char memory[4096];
+    unsigned short stack[16];
+
+    // registers
+    unsigned char registers[16];
+    unsigned short program_counter;
+    unsigned short index;
+    unsigned short stack_pointer;
+
+    // timers
+    unsigned char delay_timer;
+    unsigned char sound_timer;
+
+    // display
+    unsigned char graphics[64 * 32];
+
+    // keys
+    unsigned char keyboard[16];
+
+    unsigned short current_opcode;
+} Chip8;
+#endif
