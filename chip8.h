@@ -12,26 +12,26 @@
 #define ROM_END 0xFFF
 
 typedef struct {
-    unsigned char RAM[MAX_MEMORY];
-    unsigned short stack[STACK_SIZE];
+    uint8_t RAM[MAX_MEMORY];
+    uint16_t stack[STACK_SIZE];
 
     // registers
-    unsigned char V[NUM_REGISTERS];
-    unsigned short program_counter;
-    unsigned short index;
-    unsigned short stack_pointer;
+    uint8_t V[NUM_REGISTERS];
+    uint16_t program_counter;
+    uint16_t index;
+    uint16_t stack_pointer;
 
     // timers
-    unsigned char delay_timer;
-    unsigned char sound_timer;
+    uint8_t delay_timer;
+    uint8_t sound_timer;
 
     // display
-    unsigned char graphics[SCREEN_WIDTH * SCREEN_HEIGHT];
+    uint8_t graphics[SCREEN_WIDTH * SCREEN_HEIGHT];
 
     // keys
-    unsigned char keyboard[NUM_KEYS];
+    uint8_t keyboard[NUM_KEYS];
 
-    unsigned short current_opcode;
+    uint16_t current_opcode;
 } Chip8;
 
 const static uint8_t font_set[] = {
