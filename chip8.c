@@ -72,14 +72,14 @@ void init(Chip8 *chip8) {
         chip8->RAM[i] = font_set[i];
     }
 
-    // reset timers
-    chip8->delay_timer = 0;
-    chip8->sound_timer = 0;
-
     // keyboard
     for (int i = 0; i < NUM_KEYS; i++) {
         chip8->keyboard[i] = 0;
     }
+
+    // reset timers
+    chip8->delay_timer = 0;
+    chip8->sound_timer = 0;
 }
 
 // similar to init but keeps ram
@@ -118,7 +118,13 @@ void reset(Chip8 *chip8) {
     chip8->delay_timer = 0;
     chip8->sound_timer = 0;
 }
-void get_opcode(Chip8 chip8);
+uint16_t get_opcode(Chip8 *chip8) {
+    uint16_t opcode;
+    uint8_t most_significant_bit = chip8->RAM[chip8->program_counter];
+    uint8_t least_significant_bit = chip8->RAM[chip8->program_counter + 1];
+    opcode = most_significant_bit << 8 | least_significant_bit;
+    return opcode;
+}
 void execute_opcode(Chip8 *chip8);
 void process_user_input(Chip8 *chip8);
 void update_timers(Chip8 *chip8);
