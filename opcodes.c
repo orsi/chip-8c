@@ -203,17 +203,21 @@ void draw_at_vx_vy(Chip8 *chip8) {
     for (int y = 0; y < sprite_height; y++) {
         pixel_memory = chip8->RAM[chip8->index + y];
         for (int x = 0; x < SPRITE_WIDTH; x++) {
-            pixel_bit = pixel_memory & (0x80 >> x);
-            uint8_t relative_coordinate = x_coordinate + x + ((y_coordinate + y) * SCREEN_WIDTH);
+            // if ((pixel_memory & (0x80 >> x_coordinate)) != 0) {
+            //     if (chip8->graphics[y + y_coordinate][x + x_coordinate] == 1) {
+            //         chip8->V[0xF] = 1;
+            //     }
+            //     chip8->graphics[y + y_coordinate][x + x_coordinate] ^= 1;
+            // }
             
+            pixel_bit = pixel_memory & (0x80 >> x);
             // set V[F] = 1 if any pixel has been unset
             if (chip8->V[0xF] == 0 &&
-                chip8->graphics[relative_coordinate][x] == 1 &&
+                chip8->graphics[y_coordinate + y][x_coordinate + x] == 1 &&
                 pixel_bit == 0) {
                 chip8->V[0xF] = 1;
             }
-
-            chip8->graphics[relative_coordinate][x] ^= 1;
+            chip8->graphics[y_coordinate + y][x_coordinate + x]  ^= 1;
         }
     }
 

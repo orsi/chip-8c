@@ -29,7 +29,7 @@ typedef struct {
     uint8_t sound_timer;
 
     // display
-    uint8_t graphics[SCREEN_WIDTH][SCREEN_HEIGHT];
+    uint8_t graphics[SCREEN_HEIGHT][SCREEN_WIDTH];
 
     // keys
     uint8_t keyboard[NUM_KEYS];
