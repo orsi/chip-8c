@@ -45,7 +45,7 @@ int main(int argc, char ** argv) {
         } while (chip8.is_paused_flag && chip8.is_running_flag);
 
         if (division_cycles == 9) {
-            //  update_timers(&user_chip8);
+            update_timers(&chip8);
             division_cycles = 0;
         }
 

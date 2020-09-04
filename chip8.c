@@ -320,4 +320,11 @@ void process_user_input(Chip8 *chip8) {
          } 
     }
 }
-void update_timers(Chip8 *chip8);
+void update_timers(Chip8 *chip8) {
+    if (chip8->delay_timer > 0) {
+        chip8->delay_timer--;
+    }
+    if (chip8->sound_timer > 0) {
+        chip8->sound_timer--;
+    }
+}
