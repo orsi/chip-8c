@@ -104,13 +104,28 @@ void set_vx_to_vx_xor_vy(Chip8 *chip8) {
 void add_vy_to_vx(Chip8 *chip8) {
     uint8_t vx_index = (chip8->current_opcode & 0x0F00) >> 8;
     uint8_t vy_index = (chip8->current_opcode & 0x00F0) >> 4;
-    chip8->V[vx_index] += chip8->V[vy_index];
+    uint16_t sum = chip8->V[vx_index] + chip8->V[vy_index];
+
+    if (sum > 255) {
+        chip8->V[0xF] = 1;
+    } else {
+        chip8->V[0xF] = 0;
+    }
+
+    chip8->V[vx_index] = sum & 0xFF;
     chip8->program_counter += 2;
 }
 // 8XY5
 void subtract_vy_from_vx(Chip8 *chip8) {
     uint8_t vx_index = (chip8->current_opcode & 0x0F00) >> 8;
     uint8_t vy_index = (chip8->current_opcode & 0x00F0) >> 4;
+
+    if (chip8->V[vx_index] < chip8->V[vy_index]) {
+        chip8->V[0xF] = 0;
+    } else {
+        chip8->V[0xF] = 1;
+    }
+
     chip8->V[vx_index] -= chip8->V[vy_index];
     chip8->program_counter += 2;
 }
@@ -152,8 +167,8 @@ void skip_vx_not_equal_vy(Chip8 *chip8) {
 }
 // ANNN
 void set_index_to(Chip8 *chip8) {
-    uint16_t value = chip8->current_opcode & 0x0FFF;
-    chip8->index = value;
+    uint16_t nnn = chip8->current_opcode & 0x0FFF;
+    chip8->index = nnn;
     chip8->program_counter += 2;
 }
 // BNNN
@@ -172,31 +187,57 @@ void set_vx_to_rand(Chip8 *chip8) {
 void draw_at_vx_vy(Chip8 *chip8) {
     uint8_t vx_index = (chip8->current_opcode & 0x0F00) >> 8;
     uint8_t vy_index = (chip8->current_opcode & 0x00F0) >> 4;
-    uint8_t n = chip8->current_opcode & 0x000F;
+    uint8_t x_coordinate = chip8->V[vx_index];
+    uint8_t y_coordinate = chip8->V[vy_index];
+    uint8_t sprite_height = chip8->current_opcode & 0x000F;
+    uint8_t pixel_memory;
+    uint8_t pixel_bit;
+
+    // reset collision register to 0
+    chip8->V[0xF] = 0;
 
     // draw 8 x n pixels at V[X], V[Y]
-    // TODO
+    for (int y = 0; y < sprite_height; y++) {
+        pixel_memory = chip8->RAM[chip8->index + y];
+        for (int x = 0; x < SPRITE_WIDTH; x++) {
+            pixel_bit = pixel_memory & (0x80 >> x);
+            uint8_t relative_coordinate = x_coordinate + x + ((y_coordinate + y) * SCREEN_WIDTH);
+            
+            // set V[F] = 1 if any pixel has been unset
+            if (chip8->V[0xF] == 0 &&
+                chip8->graphics[relative_coordinate] == 1 &&
+                pixel_bit == 0) {
+                chip8->V[0xF] = 1;
+            }
 
-    // set V[F] = 1 if any pixel flipped, else V[F] = 0
+            chip8->graphics[relative_coordinate] ^= 1;
+        }
+    }
+
     chip8->program_counter += 2;
 }
 // EX9E
 void skip_vx_pressed(Chip8 *chip8) {
     uint8_t vx_index = (chip8->current_opcode & 0x0F00) >> 8;
-    // if (chip8->keyboard[] == chip8->V[vx_index]) {
-    //     chip8->program_counter += 4;
-    // } else {
-    //     chip8->program_counter += 2;
-    // }
+    uint8_t vx_value = chip8->V[vx_index];
+
+    if (chip8->keyboard[vx_value] == 1) {
+        chip8->program_counter += 4;
+    } else {
+        chip8->program_counter += 2;
+    }
 }
 // EXA1
 void skip_vx_not_pressed(Chip8 *chip8) {
     uint8_t vx_index = (chip8->current_opcode & 0x0F00) >> 8;
-    // if (chip8->keyboard[] != chip8->V[vx_index]) {
-    //     chip8->program_counter += 4;
-    // } else {
-    //     chip8->program_counter += 2;
-    // }
+    uint8_t vx_index = (chip8->current_opcode & 0x0F00) >> 8;
+    uint8_t vx_value = chip8->V[vx_index];
+
+    if (chip8->keyboard[vx_value] == 0) {
+        chip8->program_counter += 4;
+    } else {
+        chip8->program_counter += 2;
+    }
 }
 // FX07
 void set_vx_to_delay_timer(Chip8 *chip8) {
@@ -207,7 +248,18 @@ void set_vx_to_delay_timer(Chip8 *chip8) {
 // FX0A
 void await_and_store_vx(Chip8 *chip8) {
     uint8_t vx_index = (chip8->current_opcode & 0x0F00) >> 8;
-    // chip8->V[vx_index] = get_keypressed();
+    uint8_t is_key_pressed = 0;
+
+    while (is_key_pressed == 0) {
+        for (int i = 0; i < NUM_KEYS; i++) {
+            if (chip8->keyboard[i] == 1) {
+                chip8->V[vx_index] = i;
+                is_key_pressed = 1;
+                break;
+            }
+        }
+    }
+
     chip8->program_counter += 2;
 }
 // FX15
