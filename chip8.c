@@ -35,6 +35,9 @@ void load_rom(Chip8 *chip8, const char* file) {
             printf("Rom is too large.\n");
             exit(EXIT_FAILURE);
         }
+    } else {
+        printf("Could not open file from %s.\n", file);
+        exit(EXIT_FAILURE);
     }
 
     fclose(rom);
