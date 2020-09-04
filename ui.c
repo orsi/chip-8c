@@ -13,8 +13,8 @@ void setup_window(
         "CHIP-8",
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
-        SCREEN_WIDTH,
-        SCREEN_HEIGHT,
+        WINDOW_WIDTH,
+        WINDOW_HEIGHT,
         SDL_WINDOW_SHOWN |
         SDL_WINDOW_OPENGL |
         SDL_WINDOW_RESIZABLE |
