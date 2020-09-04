@@ -58,7 +58,7 @@ void buffer_graphics(
 ) {
     for (int y = 0; y < SCREEN_HEIGHT; y++) {
         for (int x = 0; x < SCREEN_WIDTH; x++) {
-            uint8_t pixel = chip8->graphics[x][y];
+            uint8_t pixel = chip8->graphics[y][x];
             buffer[(y * SCREEN_WIDTH) + x] = (0xFFFFFF00 * pixel) | 0x000000FF;
         }
     }

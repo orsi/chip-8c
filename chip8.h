@@ -12,6 +12,8 @@
 #define ROM_END 0xFFF
 #define SPRITE_WIDTH 8
 
+#include<SDL.h>
+
 typedef struct {
     uint8_t RAM[MAX_MEMORY];
     uint16_t stack[STACK_SIZE];
@@ -33,6 +35,11 @@ typedef struct {
     uint8_t keyboard[NUM_KEYS];
 
     uint16_t current_opcode;
+
+    // status flags
+    uint8_t is_running_flag;
+    uint8_t draw_screen_flag;
+    uint8_t is_paused_flag;
 } Chip8;
 
 const static uint8_t font_set[] = {
@@ -52,6 +59,25 @@ const static uint8_t font_set[] = {
     0xE0, 0x90, 0x90, 0x90, 0xE0, // D
     0xF0, 0x80, 0xF0, 0x80, 0xF0, // E
     0xF0, 0x80, 0xF0, 0x80, 0x80, // F
+};
+
+const static uint8_t KEYMAP[NUM_KEYS] = {
+    SDLK_x, // 0
+    SDLK_1, // 1
+    SDLK_2, // 2
+    SDLK_3, // 3
+    SDLK_q, // 4
+    SDLK_w, // 5
+    SDLK_e, // 6
+    SDLK_a, // 7
+    SDLK_s, // 8
+    SDLK_d, // 9
+    SDLK_z, // A
+    SDLK_c, // B
+    SDLK_4, // C
+    SDLK_r, // D
+    SDLK_f, // E
+    SDLK_v  // F
 };
 
 void load_rom(Chip8 *chip8, const char* file);

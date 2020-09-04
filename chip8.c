@@ -1,6 +1,8 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
+#include <SDL.h>
 #include "chip8.h"
 #include "opcodes.h"
 
@@ -46,6 +48,10 @@ void load_rom(Chip8 *chip8, const char* file) {
 
 // Initialize the default state
 void init(Chip8 *chip8) {
+    chip8->is_running_flag = true;
+    chip8->draw_screen_flag = false;
+    chip8->is_paused_flag = false;
+
     chip8->program_counter = 0;
     chip8->current_opcode = 0;
     chip8->stack_pointer = 0;
@@ -54,7 +60,7 @@ void init(Chip8 *chip8) {
     // clear display
     for (int y = 0; y <  SCREEN_HEIGHT; y++) {
         for (int x = 0; x <  SCREEN_WIDTH; x++) {
-            chip8->graphics[x][y] = 0;
+            chip8->graphics[y][x] = 0;
         }
     }
 
@@ -90,6 +96,10 @@ void init(Chip8 *chip8) {
 
 // similar to init but keeps ram
 void reset(Chip8 *chip8) {
+    chip8->is_running_flag = true;
+    chip8->draw_screen_flag = false;
+    chip8->is_paused_flag = false;
+
     chip8->program_counter = 0;
     chip8->current_opcode = 0;
     chip8->stack_pointer = 0;
@@ -98,7 +108,7 @@ void reset(Chip8 *chip8) {
     // clear display
     for (int y = 0; y <  SCREEN_HEIGHT; y++) {
         for (int x = 0; x <  SCREEN_WIDTH; x++) {
-            chip8->graphics[x][y] = 0;
+            chip8->graphics[y][x] = 0;
         }
     }
 
@@ -262,5 +272,52 @@ void execute_opcode(Chip8 *chip8) {
             break;
     }
 }
-void process_user_input(Chip8 *chip8);
+// process keyboard input
+void process_user_input(Chip8 *chip8) {
+    SDL_Event e;
+    while (SDL_PollEvent(&e)) {
+        if (e.type == SDL_KEYDOWN) {
+            switch (e.key.keysym.sym) {
+                case SDLK_ESCAPE:
+                    // quit
+                    chip8->is_running_flag = false;
+                    break;
+                case SDLK_SPACE:
+                    if (chip8->is_paused_flag) {
+                        chip8->is_paused_flag = false;
+                    }
+                    else {
+                        chip8->is_paused_flag = true;
+                    }
+                    break;
+                case SDLK_F5:
+                    reset(chip8);
+                    break;
+                default:
+                    break;
+                }
+
+            // updates each key state in the keyboard array based on their pressed status (true if pressed)
+            for (int i = 0; i < NUM_KEYS; i++) {
+                if (e.key.keysym.sym == KEYMAP[i]) {
+                    chip8->keyboard[i] = true;
+                }
+            }
+         }
+
+         // checks for keys that were not pressed, updates their state in the keyboard to false
+         if (e.type == SDL_KEYUP) {
+             for (int i = 0; i < NUM_KEYS; i++) {
+                if (e.key.keysym.sym == KEYMAP[i]) {
+                    chip8->keyboard[i] = false;
+                }
+            }
+         }
+
+         // Exit program when window 'X' is pressed
+         if (e.type == SDL_QUIT) {
+            chip8->is_running_flag = false;
+         } 
+    }
+}
 void update_timers(Chip8 *chip8);

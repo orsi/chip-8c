@@ -8,7 +8,7 @@ void call(Chip8 *chip8) {}
 void display_clear(Chip8 *chip8) {
     for (int y = 0; y < SCREEN_HEIGHT; y++) {
         for (int x = 0; x < SCREEN_WIDTH; x++) {
-        chip8->graphics[x][y] = 0;
+        chip8->graphics[y][x] = 0;
     }
     }
     chip8->program_counter += 2;
@@ -208,12 +208,12 @@ void draw_at_vx_vy(Chip8 *chip8) {
             
             // set V[F] = 1 if any pixel has been unset
             if (chip8->V[0xF] == 0 &&
-                chip8->graphics[x][relative_coordinate] == 1 &&
+                chip8->graphics[relative_coordinate][x] == 1 &&
                 pixel_bit == 0) {
                 chip8->V[0xF] = 1;
             }
 
-            chip8->graphics[x][relative_coordinate] ^= 1;
+            chip8->graphics[relative_coordinate][x] ^= 1;
         }
     }
 
