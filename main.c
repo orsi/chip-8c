@@ -5,7 +5,7 @@
 
 int main(int argc, char ** argv) {
     if (argv[1] == NULL) {
-        prinf("chip8c requires the filename as an argument: ./chip8c path/to/rom\n");
+        printf("chip8c requires the filename as an argument: ./chip8c path/to/rom\n");
         exit(EXIT_FAILURE);
     }
 
@@ -15,10 +15,10 @@ int main(int argc, char ** argv) {
     SDL_Texture* chip8_texture = NULL;
     SDL_Init(SDL_INIT_EVERYTHING);
 
-    int division_cycles = 0;
-    int total_cycles = 0;
+    // int division_cycles = 0;
+    // int total_cycles = 0;
+    // uint32_t *pixel_buffer = malloc((SCREEN_WIDTH * SCREEN_HEIGHT) * sizeof(uint32_t));
 
-    uint32_t *pixel_buffer = malloc((SCREEN_WIDTH * SCREEN_HEIGHT) * sizeof(uint32_t));
 
     setup_window(&chip8_window, &chip8_renderer, &chip8_texture);
     load_rom(&chip8, argv[1]);
