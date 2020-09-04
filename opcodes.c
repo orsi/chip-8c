@@ -5,8 +5,10 @@
 void call(Chip8 *chip8) {}
 // 00E0
 void display_clear(Chip8 *chip8) {
-    for (int i = 0; i < SCREEN_WIDTH * SCREEN_HEIGHT; i++) {
-        chip8->graphics[i] = 0;
+    for (int y = 0; y < SCREEN_HEIGHT; y++) {
+        for (int x = 0; x < SCREEN_WIDTH; x++) {
+        chip8->graphics[x][y] = 0;
+    }
     }
     chip8->program_counter += 2;
 }
@@ -205,12 +207,12 @@ void draw_at_vx_vy(Chip8 *chip8) {
             
             // set V[F] = 1 if any pixel has been unset
             if (chip8->V[0xF] == 0 &&
-                chip8->graphics[relative_coordinate] == 1 &&
+                chip8->graphics[x][relative_coordinate] == 1 &&
                 pixel_bit == 0) {
                 chip8->V[0xF] = 1;
             }
 
-            chip8->graphics[relative_coordinate] ^= 1;
+            chip8->graphics[x][relative_coordinate] ^= 1;
         }
     }
 
@@ -229,7 +231,6 @@ void skip_vx_pressed(Chip8 *chip8) {
 }
 // EXA1
 void skip_vx_not_pressed(Chip8 *chip8) {
-    uint8_t vx_index = (chip8->current_opcode & 0x0F00) >> 8;
     uint8_t vx_index = (chip8->current_opcode & 0x0F00) >> 8;
     uint8_t vx_value = chip8->V[vx_index];
 

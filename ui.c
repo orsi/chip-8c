@@ -1,4 +1,4 @@
-#include "lib/SDL2/SDL.h"
+#include <SDL.h>
 #include "ui.h"
 #include "chip8.h"
 
@@ -21,7 +21,7 @@ void setup_window(
         SDL_WINDOW_ALLOW_HIGHDPI
     );
     if ((*window) == NULL) {
-        prinf("Could not create SDL Window: %s\n", SDL_GetError());
+        printf("Could not create SDL Window: %s\n", SDL_GetError());
         exit(EXIT_FAILURE);
     }
 
@@ -64,7 +64,7 @@ void buffer_graphics(
     }
 }
 
-void buffer_graphics(
+void draw_graphics(
     uint32_t *buffer, 
     SDL_Renderer *renderer,
     SDL_Texture *texture

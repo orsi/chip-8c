@@ -1,6 +1,6 @@
 #include <stdlib.h>
+#include <SDL.h>
 #include "chip8.h"
-#include "lib/SDL2/SDL.h"
 #include "ui.h"
 
 int main(int argc, char ** argv) {

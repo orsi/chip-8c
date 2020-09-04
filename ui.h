@@ -3,7 +3,8 @@
 #define WINDOW_HEIGHT 640
 #define WINDOW_WIDTH 1280
 
-#include "lib/SDL2/SDL.h"
+#include <SDL.h>
+#include "chip8.h"
 
 void setup_window(
     SDL_Window** window,
@@ -11,9 +12,9 @@ void setup_window(
     SDL_Texture** texture
 );
 void buffer_graphics(
-    uint32_t *buffer, 
-    SDL_Renderer *renderer,
-    SDL_Texture *texture
+    Chip8 *chip8,
+    uint32_t *buffer,
+    SDL_Renderer *renderer
 );
 void draw_graphics(
     uint32_t *buffer,
