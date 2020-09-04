@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "chip8.h"
+#include "opcodes.h"
 
 // loads rom file into memory starting at 0x200
 void load_rom(Chip8 *chip8, const char* file) {
