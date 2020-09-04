@@ -10,6 +10,7 @@
 #define NUM_KEYS 16
 #define ROM_START 0x200
 #define ROM_END 0xFFF
+#define SPRITE_WIDTH 8
 
 typedef struct {
     uint8_t RAM[MAX_MEMORY];
