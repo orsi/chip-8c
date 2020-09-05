@@ -56,8 +56,8 @@ void init(Chip8 *chip8) {
     chip8->index = 0;
 
     // clear display
-    for (int y = 0; y <  SCREEN_HEIGHT; y++) {
-        for (int x = 0; x <  SCREEN_WIDTH; x++) {
+    for (int y = 0; y < SCREEN_HEIGHT; y++) {
+        for (int x = 0; x < SCREEN_WIDTH; x++) {
             chip8->graphics[y][x] = 0;
         }
     }
@@ -104,8 +104,8 @@ void reset(Chip8 *chip8) {
     chip8->index = 0;
 
     // clear display
-    for (int y = 0; y <  SCREEN_HEIGHT; y++) {
-        for (int x = 0; x <  SCREEN_WIDTH; x++) {
+    for (int y = 0; y < SCREEN_HEIGHT; y++) {
+        for (int x = 0; x < SCREEN_WIDTH; x++) {
             chip8->graphics[y][x] = 0;
         }
     }
