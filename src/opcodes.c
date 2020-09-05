@@ -23,21 +23,21 @@ void return_from_subroutine(Chip8 *chip8) {
 }
 // 1NNN
 void jump_to(Chip8 *chip8) {
-    uint16_t address = chip8->current_opcode & 0x0FFF;
-    chip8->program_counter = address;
+    uint16_t nnn = chip8->current_opcode & 0x0FFF;
+    chip8->program_counter = nnn;
 }
 // 2NNN
 void call_to(Chip8 *chip8) {
-    uint16_t address = chip8->current_opcode & 0xFFF;
+    uint16_t nnn = chip8->current_opcode & 0x0FFF;
     chip8->stack[chip8->stack_pointer] = chip8->program_counter;
     chip8->stack_pointer++;
-    chip8->program_counter = address;
+    chip8->program_counter = nnn;
 }
 // 3XNN
 void skip_if_vx_nn(Chip8 *chip8) {
     uint8_t v_index = (chip8->current_opcode & 0x0F00) >> 8;
-    uint8_t value = chip8->current_opcode & 0x00FF;
-    if (chip8->V[v_index] == value) {
+    uint8_t nn = chip8->current_opcode & 0x00FF;
+    if (chip8->V[v_index] == nn) {
         chip8->program_counter += 4;
     } else {
         chip8->program_counter += 2;
@@ -46,8 +46,8 @@ void skip_if_vx_nn(Chip8 *chip8) {
 // 4XNN
 void skip_if_vx_not_nn(Chip8 *chip8) {
     uint8_t v_index = (chip8->current_opcode & 0x0F00) >> 8;
-    uint8_t value = chip8->current_opcode & 0x00FF;
-    if (chip8->V[v_index] != value) {
+    uint8_t nn = chip8->current_opcode & 0x00FF;
+    if (chip8->V[v_index] != nn) {
         chip8->program_counter += 4;
     } else {
         chip8->program_counter += 2;
@@ -288,13 +288,13 @@ void set_sound_timer_to_vx(Chip8 *chip8) {
 // FX1E
 void add_vx_to_index(Chip8 *chip8) {
     uint8_t vx_index = (chip8->current_opcode & 0x0F00) >> 8;
-    chip8->index += chip8->V[vx_index];
+    chip8->index = chip8->index + chip8->V[vx_index];
     chip8->program_counter += 2;
 }
 // FX29
 void set_index_to_sprite_at_vx(Chip8 *chip8) {
     uint8_t vx_index = (chip8->current_opcode & 0x0F00) >> 8;
-    chip8->index = (chip8->V[vx_index] * 5);
+    chip8->index = (chip8->V[vx_index] * 0x5);
     chip8->program_counter += 2;
 }
 // FX33
