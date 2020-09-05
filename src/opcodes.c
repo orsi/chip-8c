@@ -301,9 +301,9 @@ void set_index_to_sprite_at_vx(Chip8 *chip8) {
 // FX33
 void store_binary_dec_vx(Chip8 *chip8) {
     uint8_t vx_index = (chip8->current_opcode & 0x0F00) >> 8;
-    chip8->RAM[chip8->index] = chip8->V[vx_index] & 0x0F00;
-    chip8->RAM[chip8->index + 1] = chip8->V[vx_index] & 0x00F0;
-    chip8->RAM[chip8->index + 2] = chip8->V[vx_index] & 0x000F;
+    chip8->RAM[chip8->index] = chip8->V[vx_index] / 100;
+    chip8->RAM[chip8->index + 1] = (chip8->V[vx_index] % 100) / 10;
+    chip8->RAM[chip8->index + 2] = chip8->V[vx_index] % 10;
     chip8->program_counter += 2;
 }
 // FX55
