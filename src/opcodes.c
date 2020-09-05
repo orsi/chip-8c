@@ -160,7 +160,8 @@ void set_vx_to_vy_minus_vx(Chip8 *chip8) {
 // 8XYE
 void store_hibit_vf_shift_vx_left(Chip8 *chip8) {
     uint8_t vx_index = (chip8->current_opcode & 0x0F00) >> 8;
-    if ((chip8->V[vx_index] & 10000000) == 1) {
+    uint8_t value = chip8->V[vx_index];
+    if ((chip8->V[vx_index] & 10000000) != 0) {
         chip8->V[0xF] = 1;
     } else {
         chip8->V[0xF] = 0;
