@@ -41,7 +41,9 @@ int main(int argc, char ** argv) {
             chip8.draw_screen_flag = false;
         }
         
-        process_user_input(&chip8);
+        do {
+            process_user_input(&chip8);
+        } while(chip8.is_paused_flag && chip8.is_running_flag);
 
         if (division_cycles == 9) {
             update_timers(&chip8);
