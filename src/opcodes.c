@@ -309,7 +309,7 @@ void store_binary_dec_vx(Chip8 *chip8) {
 // FX55
 void store_v0_vx_memory(Chip8 *chip8) {
     uint8_t vx_index = (chip8->current_opcode & 0x0F00) >> 8;
-    for (int i = 0; i < vx_index; i++) {
+    for (int i = 0; i <= vx_index; i++) {
         chip8->RAM[chip8->index + i] = chip8->V[i];
     }
     chip8->program_counter += 2;
@@ -317,7 +317,7 @@ void store_v0_vx_memory(Chip8 *chip8) {
 // FX65
 void fill_v0_vx_memory(Chip8 *chip8) {
     uint8_t vx_index = (chip8->current_opcode & 0x0F00) >> 8;
-    for (int i = 0; i < vx_index; i++) {
+    for (int i = 0; i <= vx_index; i++) {
         chip8->V[i] = chip8->RAM[chip8->index + i];
     }
     chip8->program_counter += 2;
