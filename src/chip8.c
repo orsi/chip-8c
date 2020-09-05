@@ -27,9 +27,9 @@ void load_rom(Chip8 *chip8, const char* file) {
         fread(rom_buffer, sizeof(uint8_t), rom_length, rom);
 
         // check size of rom
-        if ((0xFFF - 0x200) >= rom_length) {
+        if ((ROM_END - ROM_START) >= rom_length) {
             for (int i = 0; i < rom_length; i++) {
-                chip8->RAM[i + 0x200] = rom_buffer[i];
+                chip8->RAM[i + ROM_START] = rom_buffer[i];
             }
         } else {
             printf("Rom is too large.\n");
