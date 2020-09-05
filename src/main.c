@@ -27,7 +27,7 @@ int main(int argc, char ** argv) {
 
     load_rom(&chip8, argv[1]);
 
-    printf("%d\n", chip8.draw_screen_flag);
+    // emulator loop
     while(chip8.is_running_flag) {
         execute_opcode(&chip8);
         division_cycles++;
