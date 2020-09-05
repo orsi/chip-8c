@@ -12,6 +12,7 @@ void display_clear(Chip8 *chip8) {
             chip8->graphics[y][x] = 0;
         }
     }
+    chip8->draw_screen_flag = true;
     chip8->program_counter += 2;
 }
 // 00EE
