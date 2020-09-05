@@ -249,16 +249,17 @@ void set_vx_to_delay_timer(Chip8 *chip8) {
 // FX0A
 void await_and_store_vx(Chip8 *chip8) {
     uint8_t vx_index = (chip8->current_opcode & 0x0F00) >> 8;
-    uint8_t is_key_pressed = 0;
 
-    while (is_key_pressed == 0) {
-        for (int i = 0; i < NUM_KEYS; i++) {
-            if (chip8->keyboard[i] == 1) {
-                chip8->V[vx_index] = i;
-                is_key_pressed = 1;
-                break;
-            }
+    uint8_t is_key_pressed = false;
+    for (int i = 0; i < NUM_KEYS; i++) {
+        if (chip8->keyboard[i] != false) {
+            chip8->V[vx_index] = i;
+            is_key_pressed = true;
         }
+    }
+
+    if (!is_key_pressed) {
+        return;
     }
 
     chip8->program_counter += 2;
