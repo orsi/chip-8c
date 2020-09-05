@@ -43,7 +43,7 @@ int main(int argc, char ** argv) {
         
         do {
             process_user_input(&chip8);
-        } while(chip8.is_paused_flag && chip8.is_running_flag);
+        } while (chip8.is_paused_flag && chip8.is_running_flag);
 
         if (division_cycles == 9) {
             update_timers(&chip8);
