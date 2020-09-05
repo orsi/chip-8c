@@ -37,8 +37,8 @@ void setup_window(
         (*renderer),
         SDL_PIXELFORMAT_RGBA8888,
         SDL_TEXTUREACCESS_TARGET,
-        WINDOW_WIDTH,
-        WINDOW_HEIGHT
+        SCREEN_WIDTH,
+        SCREEN_HEIGHT
     );
     if (*texture == NULL) {
         printf("Could not create SDL Texture: %s\n", SDL_GetError());

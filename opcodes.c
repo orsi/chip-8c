@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include "chip8.h"
 
 // 0NNN
@@ -8,8 +9,8 @@ void call(Chip8 *chip8) {}
 void display_clear(Chip8 *chip8) {
     for (int y = 0; y < SCREEN_HEIGHT; y++) {
         for (int x = 0; x < SCREEN_WIDTH; x++) {
-        chip8->graphics[y][x] = 0;
-    }
+            chip8->graphics[y][x] = 0;
+        }
     }
     chip8->program_counter += 2;
 }
@@ -203,24 +204,17 @@ void draw_at_vx_vy(Chip8 *chip8) {
     for (int y = 0; y < sprite_height; y++) {
         pixel_memory = chip8->RAM[chip8->index + y];
         for (int x = 0; x < SPRITE_WIDTH; x++) {
-            // if ((pixel_memory & (0x80 >> x_coordinate)) != 0) {
-            //     if (chip8->graphics[y + y_coordinate][x + x_coordinate] == 1) {
-            //         chip8->V[0xF] = 1;
-            //     }
-            //     chip8->graphics[y + y_coordinate][x + x_coordinate] ^= 1;
-            // }
-            
             pixel_bit = pixel_memory & (0x80 >> x);
             // set V[F] = 1 if any pixel has been unset
-            if (chip8->V[0xF] == 0 &&
-                chip8->graphics[y_coordinate + y][x_coordinate + x] == 1 &&
+            if (chip8->graphics[y_coordinate + y][x_coordinate + x] == 1 &&
                 pixel_bit == 0) {
                 chip8->V[0xF] = 1;
             }
-            chip8->graphics[y_coordinate + y][x_coordinate + x]  ^= 1;
+            chip8->graphics[y_coordinate + y][x_coordinate + x] ^= pixel_bit;
         }
     }
 
+    chip8->draw_screen_flag = true;
     chip8->program_counter += 2;
 }
 // EX9E

@@ -50,7 +50,7 @@ void init(Chip8 *chip8) {
     chip8->draw_screen_flag = false;
     chip8->is_paused_flag = false;
 
-    chip8->program_counter = 0;
+    chip8->program_counter = ROM_START;
     chip8->current_opcode = 0;
     chip8->stack_pointer = 0;
     chip8->index = 0;
@@ -98,7 +98,7 @@ void reset(Chip8 *chip8) {
     chip8->draw_screen_flag = false;
     chip8->is_paused_flag = false;
 
-    chip8->program_counter = 0;
+    chip8->program_counter = ROM_START;
     chip8->current_opcode = 0;
     chip8->stack_pointer = 0;
     chip8->index = 0;
@@ -156,7 +156,7 @@ void execute_opcode(Chip8 *chip8) {
                     return_from_subroutine(chip8);
                     break;
                 default:
-                    // call machine code?
+                    printf("Unrecognized opcode: 0x%x\n", opcode);
                     break;
             }
             break;
@@ -210,6 +210,9 @@ void execute_opcode(Chip8 *chip8) {
                 case 0x000E:
                     store_hibit_vf_shift_vx_left(chip8);  
                     break;
+                default:
+                    printf("Unrecognized opcode: 0x%x\n", opcode);
+                    break;
             }
             break;
         case 0x9000:
@@ -234,6 +237,9 @@ void execute_opcode(Chip8 *chip8) {
                     break;
                 case 0x00A1:
                     skip_vx_not_pressed(chip8);           
+                    break;
+                default:
+                    printf("Unrecognized opcode: 0x%x\n", opcode);
                     break;
             }
             break;
@@ -266,7 +272,13 @@ void execute_opcode(Chip8 *chip8) {
                 case 0x0065:
                     fill_v0_vx_memory(chip8);             
                     break;
+                default:
+                    printf("Unrecognized opcode: 0x%x\n", opcode);
+                    break;
             }
+            break;
+        default:
+            printf("Unrecognized opcode: 0x%x\n", opcode);
             break;
     }
 }

@@ -27,6 +27,7 @@ int main(int argc, char ** argv) {
 
     load_rom(&chip8, argv[1]);
 
+    printf("%d\n", chip8.draw_screen_flag);
     while(chip8.is_running_flag) {
         execute_opcode(&chip8);
         division_cycles++;
@@ -40,13 +41,19 @@ int main(int argc, char ** argv) {
             chip8.draw_screen_flag = false;
         }
         
-        do {
-            process_user_input(&chip8);
-        } while (chip8.is_paused_flag && chip8.is_running_flag);
+        process_user_input(&chip8);
 
         if (division_cycles == 9) {
             update_timers(&chip8);
             division_cycles = 0;
+        }
+
+        if (total_cycles % 1000 == 0) {
+            // print small debug every 1000 cycles
+            printf("%d - opcode: %x\n", 
+                total_cycles, 
+                chip8.current_opcode
+            );
         }
 
         usleep(1000);
