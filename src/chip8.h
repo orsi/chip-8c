@@ -6,7 +6,7 @@
 #define STACK_SIZE 16
 #define MAX_MEMORY 4096
 #define NUM_REGISTERS 16
-#define FONT_SIZE 64
+#define FONT_SIZE 80
 #define NUM_KEYS 16
 #define ROM_START 0x200
 #define ROM_END 0xFFF
@@ -42,7 +42,7 @@ typedef struct {
     uint8_t is_paused_flag;
 } Chip8;
 
-const static uint8_t font_set[] = {
+const static uint8_t font_set[FONT_SIZE] = {
     0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
     0x20, 0x60, 0x20, 0x20, 0x70, // 1
     0xF0, 0x10, 0xF0, 0x80, 0xF0, // 2
