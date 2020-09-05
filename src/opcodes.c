@@ -136,7 +136,11 @@ void subtract_vy_from_vx(Chip8 *chip8) {
 // 8XY6
 void store_lobit_vf_shift_vx_right(Chip8 *chip8) {
     uint8_t vx_index = (chip8->current_opcode & 0x0F00) >> 8;
-    chip8->V[0xF] = chip8->V[vx_index] & 00000001;
+    if ((chip8->V[vx_index] & 00000001) == 1) {
+        chip8->V[0xF] = 1;
+    } else {
+        chip8->V[0xF] = 0;
+    }
     chip8->V[vx_index] = chip8->V[vx_index] >> 1;
     chip8->program_counter += 2;
 }
@@ -155,7 +159,11 @@ void set_vx_to_vy_minus_vx(Chip8 *chip8) {
 // 8XYE
 void store_hibit_vf_shift_vx_left(Chip8 *chip8) {
     uint8_t vx_index = (chip8->current_opcode & 0x0F00) >> 8;
-    chip8->V[0xF] = chip8->V[vx_index] & 10000000;
+    if ((chip8->V[vx_index] & 10000000) == 1) {
+        chip8->V[0xF] = 1;
+    } else {
+        chip8->V[0xF] = 0;
+    }
     chip8->V[vx_index] = chip8->V[vx_index] << 1;
     chip8->program_counter += 2;
 }
@@ -285,7 +293,7 @@ void add_vx_to_index(Chip8 *chip8) {
 // FX29
 void set_index_to_sprite_at_vx(Chip8 *chip8) {
     uint8_t vx_index = (chip8->current_opcode & 0x0F00) >> 8;
-    chip8->index += chip8->RAM[chip8->V[vx_index]];
+    chip8->index = (chip8->V[vx_index] * 5);
     chip8->program_counter += 2;
 }
 // FX33
