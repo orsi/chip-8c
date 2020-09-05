@@ -157,6 +157,7 @@ void execute_opcode(Chip8 *chip8) {
                     break;
                 default:
                     printf("Unrecognized opcode: 0x%x\n", opcode);
+                    exit(EXIT_FAILURE);
                     break;
             }
             break;
@@ -212,6 +213,7 @@ void execute_opcode(Chip8 *chip8) {
                     break;
                 default:
                     printf("Unrecognized opcode: 0x%x\n", opcode);
+                    exit(EXIT_FAILURE);
                     break;
             }
             break;
@@ -240,6 +242,7 @@ void execute_opcode(Chip8 *chip8) {
                     break;
                 default:
                     printf("Unrecognized opcode: 0x%x\n", opcode);
+                    exit(EXIT_FAILURE);
                     break;
             }
             break;
@@ -274,11 +277,13 @@ void execute_opcode(Chip8 *chip8) {
                     break;
                 default:
                     printf("Unrecognized opcode: 0x%x\n", opcode);
+                    exit(EXIT_FAILURE);
                     break;
             }
             break;
         default:
             printf("Unrecognized opcode: 0x%x\n", opcode);
+            exit(EXIT_FAILURE);
             break;
     }
 }
