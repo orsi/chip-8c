@@ -205,12 +205,13 @@ void draw_at_vx_vy(Chip8 *chip8) {
         pixel_memory = chip8->RAM[chip8->index + y];
         for (int x = 0; x < SPRITE_WIDTH; x++) {
             pixel_bit = pixel_memory & (0x80 >> x);
-            // set V[F] = 1 if any pixel has been unset
-            if (chip8->graphics[y_coordinate + y][x_coordinate + x] == 1 &&
-                pixel_bit == 0) {
-                chip8->V[0xF] = 1;
+            if (pixel_bit != 0) {
+                // set V[F] = 1 if pixel collision
+                if (chip8->graphics[y_coordinate + y][x_coordinate + x] == 1) {
+                    chip8->V[0xF] = 1;
+                }
+                chip8->graphics[y_coordinate + y][x_coordinate + x] ^= 1;
             }
-            chip8->graphics[y_coordinate + y][x_coordinate + x] ^= pixel_bit;
         }
     }
 
