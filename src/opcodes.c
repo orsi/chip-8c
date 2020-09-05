@@ -153,7 +153,7 @@ void set_vx_to_vy_minus_vx(Chip8 *chip8) {
     } else {
         chip8->V[0xF] = 1;
     }
-    chip8->V[vx_index] = chip8->V[vx_index] - chip8->V[vy_index];
+    chip8->V[vx_index] = chip8->V[vy_index] - chip8->V[vx_index];
     chip8->program_counter += 2;
 }
 // 8XYE
