@@ -4,6 +4,7 @@
 #include <SDL.h>
 #include "chip8.h"
 #include "ui.h"
+#include "audio.h"
 
 int main(int argc, char ** argv) {
     if (argv[1] == NULL) {
@@ -15,11 +16,15 @@ int main(int argc, char ** argv) {
     Chip8 chip8;
     init(&chip8);
 
+    // setup graphics window
     SDL_Window* chip8_window = NULL;
     SDL_Renderer* chip8_renderer = NULL;
     SDL_Texture* chip8_texture = NULL;
     SDL_Init(SDL_INIT_EVERYTHING);
     setup_window(&chip8_window, &chip8_renderer, &chip8_texture);
+
+    // setup audio
+    setup_audio();
 
     int division_cycles = 0;
     int total_cycles = 0;
@@ -48,6 +53,12 @@ int main(int argc, char ** argv) {
         if (division_cycles == 9) {
             update_timers(&chip8);
             division_cycles = 0;
+
+            if (chip8.sound_timer > 0) {
+                play_tone();
+            } else {
+                stop_audio();
+            }
         }
 
         if (total_cycles % 1000 == 0) {
