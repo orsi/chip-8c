@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <unistd.h>
+#include <time.h>
 #include <SDL.h>
 #include "chip8.h"
 #include "ui.h"
@@ -26,20 +27,23 @@ int main(int argc, char ** argv) {
     // setup audio
     setup_audio();
 
-    int division_cycles = 0;
-    int total_cycles = 0;
-    uint32_t *pixel_buffer = malloc((SCREEN_WIDTH * SCREEN_HEIGHT) * sizeof(uint32_t));
-
+    // load rom
     load_rom(&chip8, argv[1]);
+
+    // setup timers and graphics buffer
+    int cpuHz = 500; // hz
+    int timerAccumulator = 0;
+    int timerHz = 60; //hz
+    int timerCpuCycles = 500 / 60;
+    int usecDelay = 1000 * 1000 / cpuHz;
+    uint32_t *pixel_buffer = malloc((SCREEN_WIDTH * SCREEN_HEIGHT) * sizeof(uint32_t));
 
     // emulator loop
     while(chip8.is_running_flag) {
-        execute_opcode(&chip8);
-        division_cycles++;
-        total_cycles++;
+        timerAccumulator++;
 
-        // If the draw screen flag was set to true during the last 
-        // instruction, render the updated screen and then clear the flag
+        execute_opcode(&chip8);
+
         if (chip8.draw_screen_flag) {
             buffer_graphics(&chip8, pixel_buffer, chip8_renderer);
             draw_graphics(pixel_buffer, chip8_renderer, chip8_texture);
@@ -50,26 +54,18 @@ int main(int argc, char ** argv) {
             process_user_input(&chip8);
         } while (chip8.is_paused_flag && chip8.is_running_flag);
 
-        if (division_cycles == 9) {
+        // timers update at 60hz
+        if (timerAccumulator > timerCpuCycles) {
             update_timers(&chip8);
-            division_cycles = 0;
-
             if (chip8.sound_timer > 0) {
                 play_tone();
             } else {
                 stop_audio();
             }
+            timerAccumulator = 0;
         }
 
-        if (total_cycles % 1000 == 0) {
-            // print small debug every 1000 cycles
-            printf("%d - opcode: %x\n", 
-                total_cycles, 
-                chip8.current_opcode
-            );
-        }
-
-        usleep(1000);
+        usleep(usecDelay);
     }
 
     // close window and free data
