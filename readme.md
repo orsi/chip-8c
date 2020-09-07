@@ -29,7 +29,7 @@ chip8c:
 ```
 
 # Resources and Credit
-[Chip-8 Wikepedia](https://en.wikipedia.org/wiki/CHIP-8)
-[cookerlyk/Chip8](https://github.com/cookerlyk/Chip8) - C code reference
-[How to write an emulator (CHIP-8 interpreter) - Lawrence Muller](http://www.multigesture.net/articles/how-to-write-an-emulator-chip-8-interpreter/) - More in-depth details on opcode functionality
-[BC_test.ch8](https://slack-files.com/T3CH37TNX-F3RF5KT43-0fb93dbd1f) and [BC_test.txt](https://slack-files.com/T3CH37TNX-F3RKEUKL4-b05ab4930d) for validating each opcode
+- [Chip-8 Wikepedia](https://en.wikipedia.org/wiki/CHIP-8)  
+- [cookerlyk/Chip8](https://github.com/cookerlyk/Chip8) - C code reference  
+- [How to write an emulator (CHIP-8 interpreter) - Lawrence Muller](http://www.multigesture.net/articles/how-to-write-an-emulator-chip-8-interpreter/) - More in-depth details on opcode functionality  
+- [BC_test.ch8](https://slack-files.com/T3CH37TNX-F3RF5KT43-0fb93dbd1f) and [BC_test.txt](https://slack-files.com/T3CH37TNX-F3RKEUKL4-b05ab4930d) for validating each opcode
